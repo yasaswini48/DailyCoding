@@ -1,0 +1,46 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+struct Result
+{
+    Result() : output(){}
+    int output[100];
+};
+int idx,k;
+void f(int lo,int hi,int preOrder[],int inOrder[],map<int,int>,struct Result&);
+struct Result solve(int preOrder[],int inOrder[],int n)
+{
+    struct Result obj;
+    map<int,int>mp;
+    for(int i=0;i<n;i++)   //inOrder ele:idx
+        mp[inOrder[i]]=i;
+    idx=k=0;
+    f(0,n-1,preOrder,inOrder,mp,obj);
+    return obj;
+}
+void f(int lo,int hi,int preOrder[],int inOrder[],map<int,int>mp,struct Result &obj)
+{
+    cout<<"lo="<<lo<<" hi="<<hi<<endl;
+    if(lo>hi)   return;
+    int pos=mp[preOrder[idx]];      //pos of preOrder ele in inOrder
+    cout<<"Idx="<<idx<<" ele="<<preOrder[idx]<<" pos="<<pos<<endl;
+    idx++;
+    f(lo,pos-1,preOrder,inOrder,mp,obj);
+    f(pos+1,hi,preOrder,inOrder,mp,obj);
+    cout<<"Ans="<<inOrder[pos]<<endl;
+    obj.output[k++]=inOrder[pos];
+}
+int main()
+{
+    int n,i,preOrder[100],inOrder[100];
+    cin>>n;
+    for(i=0;i<n;i++)
+        cin>>preOrder[i];
+    for(i=0;i<n;i++)
+        cin>>inOrder[i];
+    struct Result finalAns=solve(preOrder,inOrder,n);
+    for(i=0;i<n;i++)
+        cout<<finalAns.output[i]<<" ";
+    cout<<endl;
+    return 0;
+}
